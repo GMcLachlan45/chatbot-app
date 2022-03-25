@@ -1,10 +1,10 @@
 # 310 Project: Chatbot App
 
-## Assigment 3 note
+## Individual Project Member:
 
-Project-Report.pdf is only up-to-date as of Assignment 2. For the required documentation, see either the Word doc you came from, or further down in this Readme, under the "Assignment 3 Project Report" section especially.
+Gabriel McLachlan 86257383
 
-## Team 31 Members:
+## Original Project Team 31 Members:
 
 Mohammad Al-surkhi
 
@@ -17,12 +17,14 @@ Jordan Ribbink
 Nathan Wright
 
 ## Project Repo: 
-https://github.com/cosc310-project/chatbot-app/tree/dev
+https://github.com/GMcLachlan45/chatbot-app/
 
 ## Project Description and Purpose
 
 Description copied and pasted from the Project Plan:
-The project consists of a chatbot built in Electron; the chatbot comes with a generic visual interface to ensure simplicity of use and understanding. (Apparently this is extra credit for the next assignment, which we weren’t aware of until it had been implemented.) The chatbot takes on the role of a doctor, who can be asked questions about different symptoms and describe the likely illness and remedy. Thus, the user takes on the role of a patient.
+The project consists of a chatbot built in Electron; the chatbot comes with a generic visual interface to ensure simplicity of use and understanding.
+
+The chatbot takes on the role of a doctor, who can be asked questions about different symptoms and describe the likely illness and remedy. Thus, the user takes on the role of a patient.
 
 The purpose of the app is to make a simple diagnostic tool, so that the user can diagnose their possible illnesses without having to leave their home. A doctor will necessarily be a better diagnostic tool than this app, but it's meant to be functional just the same.
 
@@ -85,10 +87,9 @@ Open terminal in the root of the project and run this command:
 
 ## Simplified Project Structure
 
-NEW TO A3:
-./documentation
-./src/agent
-./util
+NEW TO Individual Project:
+
+((((((TODO)))))))
 
 Some files for A3 are not included for this list, as they're simply used by utilities such as TensorFlow or NLTK, or may be obsolete.
 
@@ -215,104 +216,6 @@ Class members:
 - typing: boolean (represents whether user is typing, default=false)
 - photo?: string (represents user photo URL, default=undefined)
 
-# Assignment 3 Project Report
-
-## 30-Turn Feasible Dialogue:
-
-The PDF was consistently corrupted on upload. It can be found under ./documentation/30-Turn_Convo in six parts.
-
-## Features Added:
-
-### TensorFlow:
-
-TensorFlow wasn't listed in the toolkits, but we've included it because we believe that it will more than count as one of the "other toolkits" category named.
-It essentially works as a toolkit to implement neural networks into the program.
-TensorFlow has improved the AI's ability to recognize sentences, and has been heavily integrated into synonym recognition.
-
-We have no example conversation for TensorFlow, since it's used in training the tool that recognizes the user's input. As such, the best example for it is the 30-turn scenario.
-
-### Spell Checking (Toolkit: Pyspellchecker):
-
-Spell checking isn't counted as a toolkit, but it's an important addition to the bot so we put it here to demonstrate its integration.
-The addition of spell check means that if a user doesn't know how to spell a symptom or diagnosis, then as long as it's close to the actual word, the bot will understand
-
-Here's a modified bot output that demonstrates the functionality of spell checking.
-![Spelling](/assets/examples/Spell.PNG 'Spell Checking Example')
-
-(The image can be found at ./assets/examples/Spell.PNG if there are any issues.)
-
-### Synonym Recognition - NLTK:
-
-This improves the bot through enabling the user to input synonyms for words, rather than the exact words that the bot has initially listed in its software.
-This broadens the bot's recognition of user inputs.
-
-![Synonym Recognition](/assets/examples/Syn.PNG 'Synonym Example')
-
-(The image can be found at ./assets/examples/Syn.PNG if there are any issues.)
-
-### POS Tagging - NLTK:
-
-This isn't used directly in conversation by the bot, but it is used to increase the quality of other features, like synonym recognition.
-Essentially, this ensures that synonyms are only considered when they are of the same part of speech.
-For example: if "input" is used as a noun in a sentence, synonyms of "input" as a verb will not be included.
-
-Here's a modified bot output that demonstrates the functionality of POS tagging.
-![POS](/assets/examples/POS.PNG 'POS Tagging Example')
-
-(The image can be found at ./assets/examples/POS.PNG if there are any issues.)
-
-### Sentiment Analysis - NLTK:
-
-This is the first feature that is directly viewable by the user. When the user inputs a sentence that is particularly negative -- so negative that a human themself could recognize that something is wrong -- the bot will pick up on this and show some sympathy.
-This helps the conversation flow a bit more naturally and in a realistic deployment could put a distressed user more at ease, both major improvements
-
-![SentimentAnalysis](/assets/examples/SA.PNG 'Sentiment Example')
-
-(The image can be found at ./assets/examples/SA.PNG if there are any issues.)
-
-### Named Entity Recognition - NLTK:
-
-This is another feature that is viewable by the user. If the user inputs a proper greeting or information about someone else, the bot recognizes this and appends its response accordingly
-This helps to make the conversation a bit more personal, and helps it sound less like a programmed entity and more like speaking to a real person
-
-![NE1](/assets/examples/NE.PNG 'Named Entity Recognition Example')
-
-(The image can be found at ./assets/examples/NE.PNG if there are any issues.)
-
-## Data Flow Diagrams
-
-The images and their descriptions can be found at:
-chatbot-app\documentation\DFD's.pdf
-
-## Limitations
-
-The bot occasionally fails when the input contains incorrect small words. This is caused by spellcheck, as the number of short words that they could possibly correct to causes the bot not to understand the input properly.
-
-Example:
-
-![Smal](/assets/examples/Short.png 'Small input errors')
-
-(The image can be found at ./assets/examples/Short.PNG if there are any issues.)
-
-The bot also fails when inputs are especially long. This can drag down the bot's performance, as well as raising the likelihood of giving an inaccurate response by a significant amount.
-
-Example:
-
-![large](/assets/examples/Long.png 'Large input errors')
-
-(The image can be found at ./assets/examples/Long.PNG if there are any issues.)
-
-# Github Graph:
-
-This is the entire Github tree, including all branches that were used for different features
-
-![tre5](/assets/examples/Tree5.PNG 'Trees')
-![tre4](/assets/examples/Tree4.PNG 'Trees')
-![tre3](/assets/examples/Tree3.PNG 'Trees')
-![tre2](/assets/examples/tree2.PNG 'Trees')
-![tre1](/assets/examples/Tree1.PNG 'Trees')
-
-(The images can be found at ./assets/examples/tree.PNG if there are any issues. Alternatively, in the terminal use "gitk --all")
 
 ## Possible API Elements
 
