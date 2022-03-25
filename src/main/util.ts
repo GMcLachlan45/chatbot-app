@@ -16,3 +16,7 @@ if (process.env.NODE_ENV === 'development') {
     return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
   };
 }
+
+export function resolveBotPath(filename: string): string {
+  return `${path.resolve(__dirname, '../agent/', filename)}`
+}

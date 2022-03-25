@@ -10,7 +10,6 @@ pids
 # Coverage directory used by tools like istanbul
 coverage
 .eslintcache
-.vscode
 
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
@@ -30,3 +29,9 @@ npm-debug.log.*
 *.scss.d.ts
 
 model.nlp
+
+__pycache__
+
+.env
+
+chat_model

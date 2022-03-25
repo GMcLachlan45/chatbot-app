@@ -2,6 +2,7 @@ import Message from 'renderer/models/message';
 import { Service } from '../models/service';
 import * as Vue from 'vue';
 import { ChatState } from 'renderer/store/modules/chat';
+import { IPCMessage, IPCMessageType } from 'shared/ipc-message';
 
 export class ChatService extends Service {
   messagesWaiting: { message: string; delay: number }[] = [];
@@ -11,18 +12,14 @@ export class ChatService extends Service {
     this.receiveMessageDelay(
       'Hi, I am your virtual care consultant.  How can I help you today?'
     );
-    console.log(this.app);
   }
 
   sendMessage(message: string) {
     this.addMessage(new Message(new Date(), this.state.self!!, message));
-    window.electron.ipcRenderer.queryNlp(
-      message,
+    window.electron.ipcRenderer.agentIPC(
+      new IPCMessage(IPCMessageType.AGENT_QUERY, message),
       (event: any, message: any) => {
-        this.receiveMessageDelay(
-          message.answer ??
-            "Sorry, I don't understand your question.  Can you please rephrase it?"
-        );
+        this.receiveMessageDelay(message);
       }
     );
   }

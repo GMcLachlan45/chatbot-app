@@ -2,8 +2,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
-    queryNlp(message, callback) {
-      const channel = 'nlp-query';
+    agentIPC(message, callback) {
+      const channel = 'agent-ipc';
       ipcRenderer.once(channel, callback);
       ipcRenderer.send(channel, message);
     },
