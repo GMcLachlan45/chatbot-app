@@ -51,12 +51,12 @@ class Agent:
 
             page_py = self.wiki_wiki.page(lookupQuery)
             if page_py.exists():
-                medicalList =["medicine"]
+                medicalList =["medicine", "drug", "illness", "disease", "demic", "health", "infection", "inflamation"]
                 categories=page_py.categories
                 print(len(categories))
                 returnedStatement = page_py.summary.split("\n")[0]
 
-                for category in sorted(categories.keys()):
+                for category in categories.keys():
                     medicinecheck = False
 
                     for x in medicalList:
@@ -69,7 +69,11 @@ class Agent:
 
                     if medicinecheck:
                         break 
-                return returnedStatement
+                if medicinecheck:
+                    return returnedStatement
+                else:
+                    
+                    return "I'm not sure if that has anything to do with medicine... Are you sure?"
             
 
         base =chat(check)
