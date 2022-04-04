@@ -14,6 +14,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 class Agent:
     lastname = False
     lastpage = ""
+    longer = False
     wiki_wiki = wikipediaapi.Wikipedia('en')
     def __init__(self, plugins, nltk_dependencies):
         print("Downloading nltk dependencies")
@@ -42,7 +43,20 @@ class Agent:
 
         ## Add all of the sections, and return Dr phils smart answer to the query all 3
         
+        
         check = check.lower()
+        if self.lastpage:
+            if "yes" in  check:
+                returnedStatement = ""
+                if longer = True:
+                    returnedStatement = self.lastpage.summary.split("\n")[0]
+                else:
+                    spliterator = self.lastpage.summary.split(".")
+                    returnedStatement = spliterator[0]+spliterator[1]+spliterator[2]
+                return returnedStatement
+
+                    
+
         if "look up" in check:
             lookupQuery = check.split("look up")[1].strip(":;.,\" '!?").replace(" ", "_")
 
@@ -65,14 +79,12 @@ class Agent:
                         if x in category.lower():
                             medicinecheck = True
 
-                        print(category)
-
                     if medicinecheck:
                         break 
                 if medicinecheck:
                     return returnedStatement
                 else:
-                    
+                    self.lastpage = page_py
                     return "I'm not sure if that has anything to do with medicine... Are you sure?"
             
 
