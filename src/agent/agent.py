@@ -3,6 +3,7 @@ from collections import deque
 from functools import reduce
 import nltk
 import re
+import wikipediaapi
 from chat import chat
 from random import randint
 
@@ -12,6 +13,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class Agent:
     lastname = False
+    lastpage = ""
+    wiki_wiki = wikipediaapi.Wikipedia('en')
     def __init__(self, plugins, nltk_dependencies):
         print("Downloading nltk dependencies")
         for dependency in nltk_dependencies:
@@ -23,23 +26,50 @@ class Agent:
         #return chat(query)
 
         print(self.plugins)
-        #TODO: Spelling Check, call a function within agent to fix the query to realistic words --GABE or whoever gets to it
+        # Spelling Check, call a function within agent to fix the query to realistic words 
         check = self.plugins[0].parse(query)
-        #TODO Part of speach tagging --Nathan
+        # Part of speach tagging 
         pos_tag = self.plugins[1].parse(query)
-        #TODO: Named Entity Recognition: Recognize names given and append
+        # Named Entity Recognition: Recognize names given and append
         ne_rec = self.plugins[2].parse(pos_tag) 
-        #saying "hello" or "tell jessica to" or something to the front --GABE
-        #TODO: COReference: Figure out if the query is about the user or their patient is talking about --Jordan C
+        # saying "hello" or "tell jessica to" or something to the front 
+        # CoReference: Figure out if the query is about the user or their patient is talking about 
         sentiment = self.plugins[3].parse(query)
         
         print(ne_rec)
         print(sentiment)
-        ##TODO Sentiment for easy interchangeable sentences
+        # Sentiment for easy interchangeable sentences
 
-        ####TODODODO: Add all of the sections, and return Dr phils smart answer to the query all 3
+        ## Add all of the sections, and return Dr phils smart answer to the query all 3
         
+        check = check.lower()
+        if "look up" in check:
+            lookupQuery = check.split("look up")[1].strip(":;.,\" '!?").replace(" ", "_")
+
+
+            print(lookupQuery)
+
+            page_py = self.wiki_wiki.page(lookupQuery)
+            if page_py.exists():
+                medicalList =["medicine"]
+                categories=page_py.categories
+                returnedStatement = page_py.summary.split("\n")[0]
+
+                for category in sorted(categories.keys()):
+                    medicinecheck = False
+                    for x in medicalList:
+                        if medicinecheck:
+                            break        
+                        if x in category.lower():
+                            medicinecheck = True
+                        print(str(x))
+                return returnedStatement
+            
+
         base =chat(check)
+
+
+
 
         if(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
@@ -51,6 +81,10 @@ class Agent:
             base = oh_nos[randint(0, len(oh_nos)-1 ) ] + base
         
         
+
+        
+        
+
         if len(ne_rec)>0:
             check = query.split()
 
@@ -79,7 +113,7 @@ class Agent:
 
             
 
-        return base 
+        return base
 
     
     def pos_tag(self, query):
