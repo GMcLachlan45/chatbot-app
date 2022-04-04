@@ -53,16 +53,22 @@ class Agent:
             if page_py.exists():
                 medicalList =["medicine"]
                 categories=page_py.categories
+                print(len(categories))
                 returnedStatement = page_py.summary.split("\n")[0]
 
                 for category in sorted(categories.keys()):
                     medicinecheck = False
+
                     for x in medicalList:
                         if medicinecheck:
                             break        
                         if x in category.lower():
                             medicinecheck = True
-                        print(str(x))
+
+                        print(category)
+
+                    if medicinecheck:
+                        break 
                 return returnedStatement
             
 
