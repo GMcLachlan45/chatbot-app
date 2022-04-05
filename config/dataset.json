@@ -4,7 +4,7 @@
       ""
     ],
     "responses": [
-      "Sorry, I didn't understand your question."
+      "Sorry, I don't understand. Please rephrase your query, or if you want, you can ask me to Google it for you!?"
     ]
   },
   "request.education": {
@@ -24,6 +24,19 @@
       "I studied medicine at the Alan Turing Virtual Institute of Medicine"
     ]
   },
+  "request.clinic": {
+    "patterns": [
+      "go to the hospital",
+      "go to clinic",
+      "need a hospital",
+      "need a clinic",
+      "need to see a doctor",
+      "need a nurse"
+    ],
+    "responses": [
+      "No problem! If you need to go to the hospital, just ask me for directions!"
+    ]
+  },
   "request.diagnose": {
     "patterns": [
       "like a diagnosis",
@@ -35,7 +48,7 @@
       "diagnosis"
     ],
     "responses": [
-      "I'll need to know your symptoms in order to diagnose you. You can ask for a new diagnosis at any time."
+      "I'll need to know your symptoms in order to diagnose you. You can ask for a new diagnosis at any time. Alternatively, if you want me to look something up for you, just say say so!"
     ]
   },
   "treat.headache": {
@@ -147,7 +160,8 @@
       "eye is itchy, pink, crusty",
       "itchy pink crusty eye",
       "crusty pink eyes",
-      "red, pink eye"
+      "red, pink eye",
+      "itchy, red eyes, crust"
     ],
     "responses": [
       "You have a conjunctivitis, also known as pink eye. If you would like to know how to treat pink eye, just ask."
@@ -177,7 +191,8 @@
       "pain swallow, fever",
       "have sore swollen throat",
       "It hurts to swallow",
-      "have fever, my neck is swollen"
+      "have fever, my neck is swollen",
+      "sore throat that's swollen"
     ],
     "responses": [
       "You have strep throat. If you would like to know how to treat strep throat, just ask."
