@@ -24,7 +24,7 @@ class Agent:
     wiki_wiki = wikipediaapi.Wikipedia('en')
 
     wantsDirections = False
-    gmaps =googlemaps.Client(key='#key here bb#')
+    gmaps =googlemaps.Client(key='########')#AIzaSyC17Rh9lyznoi7WSkWMvWKG1-YWXGijIBs #only use when you think it's ready'
 
 
     def __init__(self, plugins, nltk_dependencies):
@@ -79,14 +79,20 @@ class Agent:
 
         if self.wantsDirections:
             if "yes" in  check:
+
                 ##give the directions and return it
                 return returnedStatement
             if "no":
                 returnedStatement = "Okay. If you change your mind, then just ask me for directions to the hospital.
                 self.wantsDirections= False
 
+
         if "direction" in check or  "how to get to" in check:
-            
+            directions_result = self.gmaps.directions("Sydney Town Hall",
+                                     "Parramatta, NSW",
+                                     mode="transit",
+                                     departure_time=datetime.now())
+            print(directions_result)
             
             
         if "look up" in check:
