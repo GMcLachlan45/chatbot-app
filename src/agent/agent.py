@@ -48,12 +48,16 @@ class Agent:
         if self.lastpage:
             if "yes" in  check:
                 returnedStatement = ""
-                if longer = True:
+                if self.longer==True:
                     returnedStatement = self.lastpage.summary.split("\n")[0]
                 else:
                     spliterator = self.lastpage.summary.split(".")
                     returnedStatement = spliterator[0]+spliterator[1]+spliterator[2]
                 return returnedStatement
+            if "no":
+                returnedStatement = "Okay. Here's a link to the page if you change your mind: " + self.lastpage.fullurl
+                self.lastpage =""
+                self.longer = False
 
                     
 
@@ -67,8 +71,9 @@ class Agent:
             if page_py.exists():
                 medicalList =["medicine", "drug", "illness", "disease", "demic", "health", "infection", "inflamation"]
                 categories=page_py.categories
-                print(len(categories))
-                returnedStatement = page_py.summary.split("\n")[0]
+                spliterator = page_py.summary.split(".")
+                returnedStatement = "Okay, here's what I found: " +spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"...\nWould you like the rest of the summary?"
+                self.lastpage = page_py
 
                 for category in categories.keys():
                     medicinecheck = False
@@ -82,9 +87,9 @@ class Agent:
                     if medicinecheck:
                         break 
                 if medicinecheck:
+                    self.longer = True
                     return returnedStatement
                 else:
-                    self.lastpage = page_py
                     return "I'm not sure if that has anything to do with medicine... Are you sure?"
             
 
