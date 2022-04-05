@@ -3,9 +3,15 @@ from collections import deque
 from functools import reduce
 import nltk
 import re
-import wikipediaapi
+
+import wikipediaapi #use of wikipediaAPI
+
+from datetime import datetime
+import googlemaps #use of Google Maps Services Python API 
+
 from chat import chat
 from random import randint
+
 
 from plugins.agent_plugin import AgentPlugin
 from nltk.corpus import wordnet
@@ -16,6 +22,11 @@ class Agent:
     lastpage = ""
     longer = False
     wiki_wiki = wikipediaapi.Wikipedia('en')
+
+    wantsDirections = False
+    gmaps =googlemaps.Client(key='#key here bb#')
+
+
     def __init__(self, plugins, nltk_dependencies):
         print("Downloading nltk dependencies")
         for dependency in nltk_dependencies:
@@ -53,18 +64,31 @@ class Agent:
             if "yes" in  check:
                 returnedStatement = ""
                 if self.longer==True:
+                    self.longer==False
                     returnedStatement = self.lastpage.summary.split("\n")[0]
                 else:
                     spliterator = self.lastpage.summary.split(".")
-                    returnedStatement = spliterator[0]+spliterator[1]+spliterator[2]
+                    returnedStatement = "Okay... here it is:" + spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"."
+                self.lastpage=""
                 return returnedStatement
             if "no":
                 returnedStatement = "Okay. Here's a link to the page if you change your mind: " + self.lastpage.fullurl
                 self.lastpage =""
                 self.longer = False
+                return returnedStatement
 
-                    
+        if self.wantsDirections:
+            if "yes" in  check:
+                ##give the directions and return it
+                return returnedStatement
+            if "no":
+                returnedStatement = "Okay. If you change your mind, then just ask me for directions to the hospital.
+                self.wantsDirections= False
 
+        if "direction" in check or  "how to get to" in check:
+            
+            
+            
         if "look up" in check:
             lookupQuery = check.split("look up")[1].strip(":;.,\" '!?").replace(" ", "_")
 
@@ -96,15 +120,15 @@ class Agent:
                 else:
                     return "I'm not sure if that has anything to do with medicine... Are you sure?"
             else:
-                returnedStatement = "It doesn't look like there's a Wikipedia page on " +lookupQuery+". "
+                returnedStatement = "It doesn't look like there's a Wikipedia page on " +lookupQuery+"."
 
         base =chat(check)
 
 
         
         if(sentiment<-.8):
+            wantsDirections = True
             base = "That doesn't sound good at all... " + base +" If you feel that bad, you should probably go to the hospital. Would you like directions to the nearest hospital?"
-        
         elif(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
                       "That doesn't sound very good. ",
@@ -121,28 +145,14 @@ class Agent:
         if len(ne_rec)>0:
             check = query.split()
 
-            if "they" in check:
+            if "they" in check or "They" in check or "their" in check or "Their" in check:
                 base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
                 self.lastname = True
-                
-            if "They" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-            if "their" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-                
-            if "Their" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-                
             if "I'm" in check:
                 base = "Hello, " + ne_rec[0] + ". " + base
         else:
-            if "They" in check:
-                base = "Tell them: \"" + base + "\""
-            if "they" in check:
-                base = "Tell them: \"" + base + "\""
+            if "They" in check or "they" in check:
+                base = "Tell them: \"" + base + "\"
 
             
 
