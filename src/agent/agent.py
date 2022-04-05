@@ -45,6 +45,10 @@ class Agent:
         
         
         check = check.lower()
+
+
+
+
         if self.lastpage:
             if "yes" in  check:
                 returnedStatement = ""
@@ -91,14 +95,17 @@ class Agent:
                     return returnedStatement
                 else:
                     return "I'm not sure if that has anything to do with medicine... Are you sure?"
-            
+            else:
+                returnedStatement = "It doesn't look like there's a Wikipedia page on " +lookupQuery+". "
 
         base =chat(check)
 
 
-
-
-        if(sentiment<-.5):
+        
+        if(sentiment<-.8):
+            base = "That doesn't sound good at all... " + base +" If you feel that bad, you should probably go to the hospital. Would you like directions to the nearest hospital?"
+        
+        elif(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
                       "That doesn't sound very good. ",
                       "I'm sorry you feel this way. ",
@@ -106,7 +113,6 @@ class Agent:
                       "Hold on, we'll get you feeling better in no time! ",
                       "I'll work my hardest to help you feel better. "]
             base = oh_nos[randint(0, len(oh_nos)-1 ) ] + base
-        
         
 
         
