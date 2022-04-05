@@ -79,7 +79,7 @@ class Agent:
 
         if self.wantsDirections:
             if "yes" in  check:
-
+                returnedStatement =  "Okay, here are the directions to the closest hospital: " + getDirections()
                 ##give the directions and return it
                 return returnedStatement
             if "no":
@@ -88,11 +88,9 @@ class Agent:
 
 
         if "direction" in check or  "how to get to" in check:
-            directions_result = self.gmaps.directions("Sydney Town Hall",
-                                     "Parramatta, NSW",
-                                     mode="transit",
-                                     departure_time=datetime.now())
-            print(directions_result)
+            returnedStatement =  "Okay, here are the directions to the closest hospital:" + getDirections()
+                ##give the directions and return it
+            return returnedStatement
             
             
         if "look up" in check:
@@ -134,7 +132,7 @@ class Agent:
         
         if(sentiment<-.8):
             wantsDirections = True
-            base = "That doesn't sound good at all... " + base +" If you feel that bad, you should probably go to the hospital. Would you like directions to the nearest hospital?"
+            base = "That doesn't sound good at all... " + base +".. If you feel that bad though, you should probably go to the hospital. Would you like directions to the nearest hospital?"
         elif(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
                       "That doesn't sound very good. ",
@@ -194,3 +192,33 @@ class Agent:
         except:
             print("Encountered an error; make sure you inputted a valid word to get synonyms.")
             return word
+    
+            
+    def getDirections(self):
+        #find the user's location via geolocation   
+        response = self.gmaps.places_autocomplete("UBCO")
+        results = response.get('results')
+
+        orig = results[0]['formatted_address']
+        #get the desired location
+        response = self.gmaps.places_nearby(location = orig, type = "hospital")
+        results = response.get('results')
+        
+        dest = results[0]['formatted_address']
+        name = results[0]['name']
+
+        #orig = results[0]['formatted_address']
+        #orig = results[0]['formatted_address']
+
+
+        #Get the directions, and format them as a string
+        directions_result = self.gmaps.directions(dest,
+                                     orig)
+                                     
+        returnStatement = name +". To get there from your current location: "
+        for i in range (0, len (directions_result['routes'][0]['legs'][0]['steps'])):
+            j = result['routes'][0]['legs'][0]['steps'][i]['html_instructions'] 
+            print j
+            returnStatement = returnStatement + j +", then "
+        returnStatement = returnStatement + "you'll have arrived at your destination."
+        return returnStatement
