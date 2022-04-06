@@ -6,7 +6,7 @@ import re
 
 import wikipediaapi #use of wikipediaAPI
 
-from datetime import datetime
+from time import sleep
 import googlemaps #use of Google Maps Services Python API 
 
 from chat import chat
@@ -24,7 +24,7 @@ class Agent:
     wiki_wiki = wikipediaapi.Wikipedia('en')
 
     wantsDirections = False
-    gmaps =googlemaps.Client(key='########')#AIzaSyC17Rh9lyznoi7WSkWMvWKG1-YWXGijIBs #only use when you think it's ready'
+    gmaps =googlemaps.Client(key= str(open("googleapikey.txt", "r+").read())) #only use when you think it's ready'
 
 
     def __init__(self, plugins, nltk_dependencies):
@@ -79,18 +79,23 @@ class Agent:
 
         if self.wantsDirections:
             if "yes" in  check:
-                returnedStatement =  "Okay, here are the directions to the closest hospital: " + getDirections()
+                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
                 ##give the directions and return it
+                self.wantsDirections = False
                 return returnedStatement
             if "no":
-                returnedStatement = "Okay. If you change your mind, then just ask me for directions to the hospital.
+                returnedStatement = "Okay. If you change your mind, then just ask me for directions to the hospital."
                 self.wantsDirections= False
+                return returnedStatement
 
 
         if "direction" in check or  "how to get to" in check:
-            returnedStatement =  "Okay, here are the directions to the closest hospital:" + getDirections()
+            if "hospital" in check or "clinic" in check:
+                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
                 ##give the directions and return it
-            return returnedStatement
+                return returnedStatement
+            else:
+                return "Sorry, I'm only qualified to give you directions to the hospital."
             
             
         if "look up" in check:
@@ -130,8 +135,8 @@ class Agent:
 
 
         
-        if(sentiment<-.8):
-            wantsDirections = True
+        if(sentiment<-.7):
+            self.wantsDirections = True
             base = "That doesn't sound good at all... " + base +".. If you feel that bad though, you should probably go to the hospital. Would you like directions to the nearest hospital?"
         elif(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
@@ -156,10 +161,10 @@ class Agent:
                 base = "Hello, " + ne_rec[0] + ". " + base
         else:
             if "They" in check or "they" in check:
-                base = "Tell them: \"" + base + "\"
+                base = 'Tell them: "' + base + '"'
 
             
-
+        sleep(2.5)
         return base
 
     
@@ -197,7 +202,7 @@ class Agent:
     def getDirections(self):
         #find the user's location via geolocation   
         response = self.gmaps.geolocate()
-        orig = response[location]
+        orig = response['location']
         origstr=str(orig['lat'])+","+ str(orig['lng']) #formats the latlng into proper coordinates
 
         #get the desired location
@@ -208,19 +213,20 @@ class Agent:
 
         dest = results['formatted_address']
 
-        #orig = results[0]['formatted_address']
-        #orig = results[0]['formatted_address']
-
-
         #Get the directions, and format them as a string
         directions_result = self.gmaps.directions(orig, dest)
-
-        time = 
-                                     
+                  
         returnStatement = name +". To get there from your current location: "
-        for i in range (0, len (directions_result[0]['legs'][0]['steps'])):
-            j = result[0]['legs'][0]['steps'][i]['html_instructions'] 
-            print j
-            returnStatement = returnStatement + j +", then "
+        for i in range (0, len(directions_result[0]['legs'][0]['steps']) - 1):
+            j = directions_result[0]['legs'][0]['steps'][i]['html_instructions'] 
+            returnStatement = returnStatement + j
+            if i != len(directions_result[0]['legs'][0]['steps']) - 2:
+                returnStatement = returnStatement+ ", then "
+
+        i =len(directions_result[0]['legs'][0]['steps'])-1
+        returnStatement +=". " + directions_result[0]['legs'][0]['steps'][i]['html_instructions']
+        #clean up the HTML tags
         returnStatement = returnStatement + ". I hope you get there safely!"
+        returnStatement = re.sub(re.compile('<.*?>'), '', returnStatement)
+        sleep(5)
         return returnStatement
