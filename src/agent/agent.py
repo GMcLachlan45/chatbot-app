@@ -232,6 +232,6 @@ class Agent:
         returnStatement +=". " + directions_result[0]['legs'][0]['steps'][i]['html_instructions']
         #clean up the HTML tags
         returnStatement = returnStatement + ". I hope you get there safely!"
-        returnStatement = re.sub(re.compile('<.*?>'), ' ', returnStatement)
+        returnStatement = re.sub(re.compile('<.*?>'), ' ', returnStatement).replace("  ", " ").replace(" ,", ",").replace(" .", ".")
         sleep(1)
         return returnStatement
