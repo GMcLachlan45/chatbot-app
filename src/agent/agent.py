@@ -196,10 +196,10 @@ class Agent:
             
     def getDirections(self):
         #find the user's location via geolocation   
-        response = self.gmaps.places_autocomplete("UBCO")
-        results = response.get('results')
+        response = self.gmaps.geolocate()
+        orig = response[location]
+        origstr=str(orig['lat'])+","+ str(orig['lng']) #formats the latlng into proper coordinates
 
-        orig = results[0]['formatted_address']
         #get the desired location
         response = self.gmaps.places_nearby(location = orig, type = "hospital")
         results = response.get('results')
