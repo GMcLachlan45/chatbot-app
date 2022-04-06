@@ -214,11 +214,13 @@ class Agent:
 
         #Get the directions, and format them as a string
         directions_result = self.gmaps.directions(orig, dest)
+
+        time = 
                                      
         returnStatement = name +". To get there from your current location: "
-        for i in range (0, len (directions_result['routes'][0]['legs'][0]['steps'])):
-            j = result['routes'][0]['legs'][0]['steps'][i]['html_instructions'] 
+        for i in range (0, len (directions_result[0]['legs'][0]['steps'])):
+            j = result[0]['legs'][0]['steps'][i]['html_instructions'] 
             print j
             returnStatement = returnStatement + j +", then "
-        returnStatement = returnStatement + "you'll have arrived at your destination."
+        returnStatement = returnStatement + ". I hope you get there safely!"
         return returnStatement
