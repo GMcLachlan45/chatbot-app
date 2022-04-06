@@ -216,7 +216,7 @@ class Agent:
         #Get the directions, and format them as a string
         directions_result = self.gmaps.directions(orig, dest)
                   
-        returnStatement = name +". To get there from your current location: "
+        returnStatement = name +". I see that you're around "  +" To get there from your current location: "
         for i in range (0, len(directions_result[0]['legs'][0]['steps']) - 1):
             j = directions_result[0]['legs'][0]['steps'][i]['html_instructions'] 
             returnStatement = returnStatement + j
