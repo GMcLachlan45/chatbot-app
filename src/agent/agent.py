@@ -3,9 +3,15 @@ from collections import deque
 from functools import reduce
 import nltk
 import re
-import wikipediaapi
+
+import wikipediaapi #use of wikipediaAPI
+
+from time import sleep
+import googlemaps #use of Google Maps Services Python API 
+
 from chat import chat
 from random import randint
+
 
 from plugins.agent_plugin import AgentPlugin
 from nltk.corpus import wordnet
@@ -16,6 +22,11 @@ class Agent:
     lastpage = ""
     longer = False
     wiki_wiki = wikipediaapi.Wikipedia('en')
+
+    wantsDirections = False
+    gmaps =googlemaps.Client(key= str(open("googleapikey.txt", "r+").read())) #only use when you think it's ready'
+
+
     def __init__(self, plugins, nltk_dependencies):
         print("Downloading nltk dependencies")
         for dependency in nltk_dependencies:
@@ -45,22 +56,48 @@ class Agent:
         
         
         check = check.lower()
+
+
+
+
         if self.lastpage:
             if "yes" in  check:
                 returnedStatement = ""
                 if self.longer==True:
+                    self.longer==False
                     returnedStatement = self.lastpage.summary.split("\n")[0]
                 else:
                     spliterator = self.lastpage.summary.split(".")
-                    returnedStatement = spliterator[0]+spliterator[1]+spliterator[2]
+                    returnedStatement = "Okay... here it is:" + spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"."
+                self.lastpage=""
                 return returnedStatement
             if "no":
                 returnedStatement = "Okay. Here's a link to the page if you change your mind: " + self.lastpage.fullurl
                 self.lastpage =""
                 self.longer = False
+                return returnedStatement
 
-                    
+        if self.wantsDirections:
+            if "yes" in  check:
+                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
+                ##give the directions and return it
+                self.wantsDirections = False
+                return returnedStatement
+            if "no":
+                returnedStatement = "Okay. If you change your mind, then just ask me for directions to the hospital."
+                self.wantsDirections= False
+                return returnedStatement
 
+
+        if "direction" in check or  "how to get to" in check:
+            if "hospital" in check or "clinic" in check:
+                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
+                ##give the directions and return it
+                return returnedStatement
+            else:
+                return "Sorry, I'm only qualified to give you directions to the hospital."
+            
+            
         if "look up" in check:
             lookupQuery = check.split("look up")[1].strip(":;.,\" '!?").replace(" ", "_")
 
@@ -91,14 +128,17 @@ class Agent:
                     return returnedStatement
                 else:
                     return "I'm not sure if that has anything to do with medicine... Are you sure?"
-            
+            else:
+                returnedStatement = "It doesn't look like there's a Wikipedia page on " +lookupQuery+"."
 
         base =chat(check)
 
 
-
-
-        if(sentiment<-.5):
+        
+        if(sentiment<-.7):
+            self.wantsDirections = True
+            base = "That doesn't sound good at all... " + base +".. If you feel that bad though, you should probably go to the hospital. Would you like directions to the nearest hospital?"
+        elif(sentiment<-.5):
             oh_nos = ["I'm sorry to hear that! ",
                       "That doesn't sound very good. ",
                       "I'm sorry you feel this way. ",
@@ -107,7 +147,6 @@ class Agent:
                       "I'll work my hardest to help you feel better. "]
             base = oh_nos[randint(0, len(oh_nos)-1 ) ] + base
         
-        
 
         
         
@@ -115,31 +154,17 @@ class Agent:
         if len(ne_rec)>0:
             check = query.split()
 
-            if "they" in check:
+            if "they" in check or "They" in check or "their" in check or "Their" in check:
                 base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
                 self.lastname = True
-                
-            if "They" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-            if "their" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-                
-            if "Their" in check:
-                base = "Please tell " + ne_rec[len(ne_rec)-1] + ": \"" + base + "\""
-                self.lastname = True
-                
             if "I'm" in check:
                 base = "Hello, " + ne_rec[0] + ". " + base
         else:
-            if "They" in check:
-                base = "Tell them: \"" + base + "\""
-            if "they" in check:
-                base = "Tell them: \"" + base + "\""
+            if "They" in check or "they" in check:
+                base = 'Tell them: "' + base + '"'
 
             
-
+        sleep(2.5)
         return base
 
     
@@ -172,3 +197,36 @@ class Agent:
         except:
             print("Encountered an error; make sure you inputted a valid word to get synonyms.")
             return word
+    
+            
+    def getDirections(self):
+        #find the user's location via geolocation   
+        response = self.gmaps.geolocate()
+        orig = response['location']
+        origstr=str(orig['lat'])+","+ str(orig['lng']) #formats the latlng into proper coordinates
+
+        #get the desired location
+        response = self.gmaps.places(location = origstr, type = "hospital")
+        results = response['results'][0]
+        
+        name = results['name']
+
+        dest = results['formatted_address']
+
+        #Get the directions, and format them as a string
+        directions_result = self.gmaps.directions(orig, dest)
+                  
+        returnStatement = name +". To get there from your current location: "
+        for i in range (0, len(directions_result[0]['legs'][0]['steps']) - 1):
+            j = directions_result[0]['legs'][0]['steps'][i]['html_instructions'] 
+            returnStatement = returnStatement + j
+            if i != len(directions_result[0]['legs'][0]['steps']) - 2:
+                returnStatement = returnStatement+ ", then "
+
+        i =len(directions_result[0]['legs'][0]['steps'])-1
+        returnStatement +=". " + directions_result[0]['legs'][0]['steps'][i]['html_instructions']
+        #clean up the HTML tags
+        returnStatement = returnStatement + ". I hope you get there safely!"
+        returnStatement = re.sub(re.compile('<.*?>'), '', returnStatement)
+        sleep(5)
+        return returnStatement
