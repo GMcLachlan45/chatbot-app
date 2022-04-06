@@ -29,7 +29,7 @@ npm-debug.log.*
 *.scss.d.ts
 
 model.nlp
-
+**/googleapikey.txt
 __pycache__
 
 .env
