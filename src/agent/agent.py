@@ -79,7 +79,7 @@ class Agent:
 
         if self.wantsDirections:
             if "yes" in  check:
-                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
+                returnedStatement =  "Okay, " + self.getDirections()
                 ##give the directions and return it
                 self.wantsDirections = False
                 return returnedStatement
@@ -91,7 +91,7 @@ class Agent:
 
         if "direction" in check or  "how to get to" in check:
             if "hospital" in check or "clinic" in check:
-                returnedStatement =  "Okay, here are the directions to the closest hospital: " + self.getDirections()
+                returnedStatement =  "Okay, " + self.getDirections()
                 ##give the directions and return it
                 return returnedStatement
             else:
@@ -198,12 +198,17 @@ class Agent:
             print("Encountered an error; make sure you inputted a valid word to get synonyms.")
             return word
     
-            
+        
     def getDirections(self):
-        #find the user's location via geolocation   
+        #find the user's location via geolocation    and reverse geocoding
         response = self.gmaps.geolocate()
         orig = response['location']
         origstr=str(orig['lat'])+","+ str(orig['lng']) #formats the latlng into proper coordinates
+
+        response = self.gmaps.reverse_geocode(origstr)
+        results = response[0]['address_components']
+
+        origAdd = results[0]['short_name']+" " + results[1]['short_name']
 
         #get the desired location
         response = self.gmaps.places(location = origstr, type = "hospital")
@@ -216,7 +221,7 @@ class Agent:
         #Get the directions, and format them as a string
         directions_result = self.gmaps.directions(orig, dest)
                   
-        returnStatement = name +". I see that you're around "  +" To get there from your current location: "
+        returnStatement = "I see that you're around " + origAdd +". The closest hospital is "+ name+ ". To get there from your current location: "
         for i in range (0, len(directions_result[0]['legs'][0]['steps']) - 1):
             j = directions_result[0]['legs'][0]['steps'][i]['html_instructions'] 
             returnStatement = returnStatement + j
@@ -227,6 +232,6 @@ class Agent:
         returnStatement +=". " + directions_result[0]['legs'][0]['steps'][i]['html_instructions']
         #clean up the HTML tags
         returnStatement = returnStatement + ". I hope you get there safely!"
-        returnStatement = re.sub(re.compile('<.*?>'), '', returnStatement)
-        sleep(5)
+        returnStatement = re.sub(re.compile('<.*?>'), ' ', returnStatement)
+        sleep(1)
         return returnStatement
