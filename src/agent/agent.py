@@ -201,19 +201,19 @@ class Agent:
         origstr=str(orig['lat'])+","+ str(orig['lng']) #formats the latlng into proper coordinates
 
         #get the desired location
-        response = self.gmaps.places_nearby(location = orig, type = "hospital")
-        results = response.get('results')
+        response = self.gmaps.places(location = origstr, type = "hospital")
+        results = response['results'][0]
         
-        dest = results[0]['formatted_address']
-        name = results[0]['name']
+        name = results['name']
+
+        dest = results['formatted_address']
 
         #orig = results[0]['formatted_address']
         #orig = results[0]['formatted_address']
 
 
         #Get the directions, and format them as a string
-        directions_result = self.gmaps.directions(dest,
-                                     orig)
+        directions_result = self.gmaps.directions(orig, dest)
                                      
         returnStatement = name +". To get there from your current location: "
         for i in range (0, len (directions_result['routes'][0]['legs'][0]['steps'])):
