@@ -98,9 +98,11 @@ Open terminal in the root of the project and run this command:
 
 ### Wikipedia API
 
-The Wikipedia API has been integrated into the chatbot so that if the user wants to know a bit more about what the Doctor is talking about, all they need to put is "Look up ______", and if it's medical related, the bot will pull up the info from Wikipedia. 
+The Wikipedia API has been integrated into the chatbot so that if the user wants to know a bit more about what the Doctor is talking about, all they need to put is "Look up ______", and if it's medical related, the Bot will pull up the info from Wikipedia. 
+
+The lookup simply uses the function to get the page's information, but determining whether something is related to medicine is actually much more subtle. It looks through the categories of the topic and sees if there are specific keywords within the categories.
     
-This helps to fill out where the team identified were some pretty big gaps in conversation from A2 and A3. If the Bot doesn't know something, then it can search it up online.
+This helps to fill out where the team identified were some pretty big gaps in conversation from A2 and A3. If the Bot doesn't know something, then it can search it up online. The ability to distinguish between medical topics also adds to the more human side of the Bot.
     
 ### The Google APIs
 
@@ -140,7 +142,7 @@ Though the wall of text isn't ideal, it makes much more sense that someone would
 
 Those were the 5 APIs integrated into my final rendition of Doctor Phil. 
 
-The Wikipedia integration helps to extend conversational potential, and help to clarify anything that the Doctor has said. 
+The Wikipedia integration helps to extend conversational potential, adds to its humanness through asking about relevance,  and help to clarify anything that the Doctor has said. 
 
 Meanwhile, the Google Maps integration helps to add a flexible, reliable and useful tool to the Doctor's coversational toolset while making him seem more human and part of this world.
 
