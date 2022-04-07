@@ -18,14 +18,19 @@ from nltk.corpus import wordnet
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class Agent:
+    
     lastname = False
     lastpage = ""
     longer = False
     wiki_wiki = wikipediaapi.Wikipedia('en')
-
+    apiKeyExists = True
     wantsDirections = False
-    gmaps =googlemaps.Client(key= str(open("googleapikey.txt", "r+").read())) #only use when you think it's ready'
-
+    
+    gmaps = ""
+    try:
+        gmaps =googlemaps.Client(key= str(open("googleapikey.txt", "r+").read())) #only use when you think it's ready'
+    except:
+        apiKeyExists = False
 
     def __init__(self, plugins, nltk_dependencies):
         print("Downloading nltk dependencies")
@@ -200,6 +205,8 @@ class Agent:
     
         
     def getDirections(self):
+        if self.apiKeyExists == False:
+            return "You do not have a proper Google Developer API key. Sorry, I can't help you."
         #find the user's location via geolocation    and reverse geocoding
         response = self.gmaps.geolocate()
         orig = response['location']
