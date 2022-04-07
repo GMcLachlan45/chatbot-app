@@ -4,7 +4,7 @@
 
 Gabriel McLachlan 86257383
 
-## Original Project Team 31 Members:
+##### Original Project Team 31 Members:
 
 Mohammad Al-surkhi
 
@@ -37,6 +37,7 @@ The purpose of the app is to make a simple diagnostic tool, so that the user can
 - Python 3 - https://www.python.org/downloads/
 - Pyenv (optional) - https://github.com/pyenv/pyenv
 - Pyenv-virtualenv (optional) - https://github.com/pyenv/pyenv-virtualenv
+- Google Maps Services API key (optional) -  https://developers.google.com/maps/documentation/javascript/get-api-key
 
 Open terminal in the root of the project and run this command:
 
@@ -84,24 +85,85 @@ Open terminal in the root of the project and run this command:
     ```
 
     The chatbot should launch.
+    
+5. (Optional) Get an API key for Google Maps Services
+
+    Visit [Google API keys documentation](https://developers.google.com/maps/documentation/javascript/get-api-key)
+    
+    Make sure to get the  [Geocoding API](https://developers.google.com/maps/documentation/geocoding/overview), [Places API](https://developers.google.com/maps/documentation/places/web-service), [Geolocation API](https://developers.google.com/maps/documentation/geolocation/overview), and [Directions API](https://developers.google.com/maps/documentation/directions).
+    
+    Replace the contents of googleapikey.txt with the API key.
+
+## List of API's used
+
+### Wikipedia API
+
+The Wikipedia API has been integrated into the chatbot so that if the user wants to know a bit more about what the Doctor is talking about, all they need to put is "Look up ______", and if it's medical related, the bot will pull up the info from Wikipedia. 
+    
+This helps to fill out where the team identified were some pretty big gaps in conversation from A2 and A3. If the Bot doesn't know something, then it can search it up online.
+    
+### The Google APIs
+
+All 4 of the next APIs used were integrated all together to give directions to a dynamically chosen location (the closest hospital to the user). If the user is feeling particularly bad, or if the bot detects that something sounds particularly bad, then the user can inquire about the directions to the nearest hospital.
+    
+This works to add an extra, more personal and interactive feature to the Bot, one that grounds it more in the real world then a set of relatively disconnected back and forths.
+    
+Though Each individual api isn't extensively used, they all have their queries, parsing and formatting. More information below.
+    
+#### Google Geolocation API
+
+Geolocation is a tool that uses nearby cell towers and wifi modems to triangulate the users latitude and longitude with a fair bit of accuracy (not 100% in more rural places, even UBCO).
+
+Within the getDirections() function to find the general latitude and longitude of the user. This is then converted into a string for further use within the function.
+
+#### Google Geocoding API
+
+Reverse Geocoding is the process of taking a set of coordinates and approximating a formatted address based on nearby roads and other addresses.
+
+Within the system, we take the latitude and longitude found via geolocation, and convert it into a named location. This location is output along with the rest of the directions, and lets the user know that the Bot knows the approximate location, which can help give a sense of security that a scared and sick user may need.
+
+#### Google Places API
+
+The Places API is a useful tool to find relevant destinations. In general this could be used to determine points of interest based on what the user wants to go to, but for the Bot he is restricted to giving directions to the nearest hospital.
+
+For this system, we take the position of the user, and use it as an origin location to bias the results to the closest and most relevent result available. Using Places itself helps to make the system more dynamic, as depending where you are, the nearest hospital will change, making the system much more flexible.
+
+#### Google Directions API
+
+Directions is pretty self explanitory. Once we have the user's location, and the hospital's address, the Directions API determines the fastest path between the two and the directions that need to be taken to get there.
+
+Once the directions to the nearest hospital have been determined, the system takes all of the relevant strings, brings them together, removes the html parts and concatinates it with the rest of the Bot's response. 
+
+Though the wall of text isn't ideal, it makes much more sense that someone would be typing this out beforehand rather than in small segments. Even a user that didn't have GPS could take those instructions print them out, and follow them to where they needed to go. I also personally believe that this makes him a lot more like a first responder, and a lot more human.
+
+### API Conclusion
+
+Those were the 5 APIs integrated into my final rendition of Doctor Phil. 
+
+The Wikipedia integration helps to extend conversational potential, and help to clarify anything that the Doctor has said. 
+
+Meanwhile, the Google Maps integration helps to add a flexible, reliable and useful tool to the Doctor's coversational toolset while making him seem more human and part of this world.
+
+Further inquiry can be had through looking at the implementation in src/agent/agent.py. 
 
 ## Simplified Project Structure
 
-NEW TO Individual Project:
+In the individual project, there were no added files to the bot. All of the work was done within src/agent/agent.py.
 
-((((((TODO)))))))
-
-Some files for A3 are not included for this list, as they're simply used by utilities such as TensorFlow or NLTK, or may be obsolete.
+There are a few new files for user setup (googleapikey.txt) and the Final Project Report though. As such, I've added them here.
 
 . &nbsp;<br />
 ├── ...&nbsp;<br />
+├── googleapikey.txt<br />
 ├── config &nbsp;<br />
 │ &nbsp; └── dataset.json &nbsp; -> Stores our dataset for NLP<br />
 ├── documentation &nbsp;<br />
 │ &nbsp; ├── 30-Turn Convo.pdf &nbsp; -> Stores images of the thirty-turn conversation as stipulated in requirements. <br />
 │ &nbsp; ├── DFD's.pdf &nbsp; -> Stores the Data Flow Diagrams and descriptions of them. <br />
 │ &nbsp; └── Unit Test Descriptions.pdf &nbsp; -> Stores descriptions of the unit tests used.
-├── Project Report.docx &nbsp; -> Our project report document<br />
+├── Project-Report-A2.pdf &nbsp; -> Our project report document for A2<br />
+├── Project-Report-A3.pdf &nbsp; -> Our project report document for A3<br />
+├── Project-Report-FINAL.pdf &nbsp; -> A copy of my final project report for the individual assignment<br />
 ├── src &nbsp;<br />
 │ &nbsp; ├── agent &nbsp;<br />
 │ &nbsp; │ &nbsp; ├── plugins &nbsp; <br />
