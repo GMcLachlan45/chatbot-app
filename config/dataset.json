@@ -95,7 +95,7 @@
       "have chronic cough"
     ],
     "responses": [
-      "Tea and honey as well as cough drops can help relive some of the coughing. An air humidifier or a steamy shower can also help. This should be ovbious but avoid smoking anything. If the cough gets worse or persists visit your doctor."
+      "Tea and honey as well as cough drops can help relive some of the coughing. An air humidifier or a steamy shower can also help. If the cough gets worse or persists visit your doctor."
     ]
   },
   "diagnose.covid": {
@@ -137,14 +137,14 @@
   },
   "diagnose.migraine": {
     "patterns": [
-      "throb headache and nausea, vomit",
+      "throb headache and nausea vomit",
       "feel nauseous and pulse headache",
       "severe head pain and vomit",
       "head pain and vomit",
       "head pain and nausea",
       "have throbbing headache and nausea",
       "have severe head pain and regularly vomit",
-      "nausea, vomit, headache, throbbing"
+      "nausea vomit headache throbbing"
     ],
     "responses": [
       "You have a migraine. If you would like to know how to treat a migraine, just ask."
@@ -373,7 +373,7 @@
       "what to do if I have stomach flu"
     ],
     "responses": [
-      "Try to avoid solid foods. If you're hungry try to eat easier to digest foods like bananas, toast, soup, etc. Avoid coffee, nicotine, fatty foods, and alcohol. Make sure to get plenty of rest as well. If you want to know what medecine can be used to treat a stomach flu, just ask."
+      "Try to avoid solid foods. If you're hungry try to eat easier to digest foods like bananas, toast, soup, etc. Avoid coffee, nicotine, fatty foods, and alcohol. Make sure to get plenty of rest as well. If you want to know what medicine can be used to treat a stomach flu, just ask."
     ]
   },
   "treat.stomachflu.medicine": {

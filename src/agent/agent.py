@@ -73,11 +73,11 @@ class Agent:
                     returnedStatement = self.lastpage.summary.split("\n")[0]
                 else:
                     spliterator = self.lastpage.summary.split(".")
-                    returnedStatement = "Okay... here it is:" + spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"."
+                    returnedStatement = "Okay... here it is: " + spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"."
                 self.lastpage=""
                 return returnedStatement
-            if "no":
-                returnedStatement = "Okay. Here's a link to the page if you change your mind: " + self.lastpage.fullurl
+            if "no" in check or "nah" in check:
+                returnedStatement = "I didn't think so. Here's a link to the page if you change your mind though: " + self.lastpage.fullurl
                 self.lastpage =""
                 self.longer = False
                 return returnedStatement
@@ -109,9 +109,9 @@ class Agent:
 
             print(lookupQuery)
 
-            page_py = self.wiki_wiki.page(lookupQuery)
+            page_py = self.wiki_wiki.page(lookupQuery.replace("for me", "").strip(":;.,\" '!?"))
             if page_py.exists():
-                medicalList =["medicine", "drug", "illness", "disease", "demic", "health", "infection", "inflamation"]
+                medicalList =["medicine", "drug", "illness", "disease", "demic", "health", "infection", "inflamation", "Stimulants"]
                 categories=page_py.categories
                 spliterator = page_py.summary.split(".")
                 returnedStatement = "Okay, here's what I found: " +spliterator[0]+"."+spliterator[1]+"."+spliterator[2] +"...\nWould you like the rest of the summary?"
